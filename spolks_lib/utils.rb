@@ -21,12 +21,12 @@ module Utils
         end.parse!
       rescue OptionParser::MissingArgument
         puts @opts
-        exit
+        exit 1
       end
 
       if options.empty? then
         puts @opts
-        exit
+        exit 1
       end
     end
 

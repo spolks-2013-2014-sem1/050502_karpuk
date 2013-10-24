@@ -8,7 +8,7 @@ parser = Utils::OptionsParser.new()
 options = parser.options
 
 port = options[:port]
-host = 'localhost'
+host = '0.0.0.0'
 
 socket = Socket.new(AF_INET, SOCK_STREAM, 0)
 socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, true)
@@ -17,6 +17,7 @@ sockaddr = Socket.sockaddr_in(port, host)
 socket.bind(sockaddr)
 socket.listen(5)
 
+client = nil
 begin
   loop do
     client, addrinfo = socket.accept
@@ -28,9 +29,11 @@ begin
     client.puts "  Port    : #{addrinfo.ip_port}"
 
     client.close
+    client =nil
   end
 rescue Interrupt
   puts " Exit"
 ensure
   socket.close
+  client.close unless client.nil?
 end
