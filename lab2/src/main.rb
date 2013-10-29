@@ -1,21 +1,16 @@
 #!/home/nikita/.rvm/bin/ruby -w
-require "socket"
+require 'socket'
 require '../../spolks_lib/utils'
-include Socket::Constants
+require '../../spolks_lib/network'
 
 # Parse Command line arguments
 parser = Utils::OptionsParser.new()
 options = parser.options
 
 port = options[:port]
-host = '0.0.0.0'
+host = options[:host]
 
-socket = Socket.new(AF_INET, SOCK_STREAM, 0)
-socket.setsockopt(SOL_SOCKET, SO_REUSEADDR, true)
-
-sockaddr = Socket.sockaddr_in(port, host)
-socket.bind(sockaddr)
-socket.listen(5)
+socket = Network::ServerTCP.new(port, host)
 
 client = nil
 begin
@@ -29,7 +24,7 @@ begin
     client.puts "  Port    : #{addrinfo.ip_port}"
 
     client.close
-    client =nil
+    client = nil
   end
 rescue Interrupt
   puts " Exit"
