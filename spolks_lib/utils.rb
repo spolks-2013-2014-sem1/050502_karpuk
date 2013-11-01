@@ -58,8 +58,11 @@ module Utils
 
     attr_accessor :options
 
-  end
+    def help
+      puts @opts
+    end
 
+  end
 end
 
 

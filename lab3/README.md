@@ -8,11 +8,11 @@ Lab 3
 ---------
 Для запуска стороны принимающей файл:
 
-	$ ruby main.rb -l 1234 -f new_file.txt
+	$ ruby main.rb -l 1234 -f file
 
 Для запуска стороны передающей файл:
 
-	$ ruby main.rb -c 1234 -f file.txt
+	$ ruby main.rb -c 1234 -f new_file
 
 Так же можно задать hosthame при помощи флага: -n 192.168.14.54 (по умолчанию он 0.0.0.0)
 

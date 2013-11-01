@@ -2,6 +2,7 @@
 require 'socket'
 require '../../spolks_lib/utils'
 require '../../spolks_lib/network'
+require_relative 'transmitter'
 
 # Parse Command line arguments
 parser = Utils::OptionsParser.new
@@ -14,42 +15,28 @@ server, client, file = nil
 
 begin
 
-  if options[:listen]
-    #Server recive file
-    file = File.open(options[:file], "w")
+  if options[:listen] # if Server
+    file = File.open(options[:file], "rb")
     server = Network::ServerTCP.new(port, host)
-    puts "Waiting for connection..."
     client, = server.accept
-    puts "Reciveing file..."
-    loop do
-      data = client.recv(1024)
-      break if data.empty?
-      file.write(data)
-    end
+    Transmitter::send(file, client)
 
-  else
-    #Client Send file
-    file = File.open(options[:file], "r")
+  else                # if Client
     client = Network::ClientTCP.new(port, host)
-    loop do
-      _, writer = IO.select(nil,[client], nil, 10)
-      break unless writer
-
-      data = file.read(1024)
-      if server = writer.shift
-        break unless data
-        len = server.send(data, 0)
-      end
-    end
-
+    file = File.open(options[:file], "wb")
+    Transmitter::recive(file, client)
   end
 
-rescue Interrupt
+rescue Interrupt => e
   puts " Exit"
-rescue Exception => e
-  puts "Catch: #{e}"
+rescue Errno::EPIPE => e
+  puts "!! Client was disconnect, file didn't send fully !!!"
+rescue Errno::ECONNREFUSED => e
+  puts "Server is disable =("
+rescue Errno::ENOENT => e
+  puts "No such file or directory"
 ensure
   file.close unless file.nil? || file.closed?
-  client.close unless file.nil? || client.closed?
-  server.close unless file.nil? || server.closed?
+  client.close unless client.nil? || client.closed?
+  server.close unless server.nil? || server.closed?
 end

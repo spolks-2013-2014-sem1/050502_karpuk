@@ -1,4 +1,4 @@
-require "socket"
+require 'socket'
 include Socket::Constants
 
 module Network
