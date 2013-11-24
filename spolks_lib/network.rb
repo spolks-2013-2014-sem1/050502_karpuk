@@ -2,6 +2,8 @@ require 'socket'
 include Socket::Constants
 
 module Network
+  include Socket::Constants
+  
   PACK_SIZE = 1024
   TIMEOUT  = 10
   BACK_LOG = 5
