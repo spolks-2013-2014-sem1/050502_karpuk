@@ -14,6 +14,10 @@ module Utils
           opts.separator ""
           opts.separator "Specific options:"
 
+          opts.on("-u", "--udp") {
+            @options[:udp] = true
+          }
+
           opts.on( "-l PORT", "--listen", String, "listen PORT" ) do |port|
             @options[:listen] = true
             @options[:host] = '0.0.0.0'
