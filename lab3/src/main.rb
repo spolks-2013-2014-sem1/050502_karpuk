@@ -1,4 +1,4 @@
-#!/home/nikita/.rvm/bin/ruby -w
+#!/usr/bin/env ruby
 require 'socket'
 require '../../spolks_lib/utils'
 require '../../spolks_lib/network'
