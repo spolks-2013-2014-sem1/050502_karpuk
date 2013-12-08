@@ -34,7 +34,7 @@ rescue Interrupt => e
 rescue Errno::EPIPE => e
   puts "!! Client was disconnect, file didn't send fully !!!"
 rescue Errno::ECONNREFUSED => e
-  puts "socket is disable =("
+  puts "socket is disable"
   puts "#{e}"
 rescue Errno::ENOENT => e
   puts "No such file or directory"
