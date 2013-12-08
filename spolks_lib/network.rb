@@ -1,4 +1,5 @@
 require 'socket'
+require 'bindata'
 include Socket::Constants
 
 module Network
@@ -7,6 +8,7 @@ module Network
   PACK_SIZE = 1024
   TIMEOUT  = 10
   BACK_LOG = 5
+  ACK = 'ACK'
   FIN = 'FIN'
 
   class ServerTCP < Socket
@@ -41,6 +43,14 @@ module Network
       super(AF_INET, SOCK_DGRAM, 0)
       setsockopt(SOL_SOCKET, SO_REUSEADDR, true)
     end
+  end
+
+  class Packet < BinData::Record
+    endian :little
+    uint32 :chunks
+    uint32 :len
+    uint32 :seek
+    string :data, :read_length => :len
   end
 
 end
